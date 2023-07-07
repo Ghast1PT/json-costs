@@ -15,5 +15,12 @@ server.listen(3000, () => {
     console.log('JSON Server is running')
 })
 
+server.use((req, res, next) => {
+  if (req.method === 'PATCH') {
+    req.method = 'PUT'; // Altera o método PATCH para PUT
+  }
+  next();
+});
+
 // Export the Server API
 module.exports = server
