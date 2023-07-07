@@ -14,6 +14,17 @@ server.use((req, res, next) => {
   next();
 });
 
+// Middleware personalizado para tratamento de erros
+server.use((err, req, res, next) => {
+  // Verifica se o erro é uma instância de SyntaxError (erro de análise JSON)
+  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+    res.status(400).json({ error: 'Erro na solicitação' });
+  } else {
+    // Outros erros não tratados
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
 server.use(router);
 
 server.listen(3000, () => {
